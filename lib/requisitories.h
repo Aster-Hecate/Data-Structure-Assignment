@@ -1,13 +1,15 @@
-#define THIS_IS_REQUISITORIES 1
+#define THIS_IS_REQUISITORIES
 
 template<class DATA>
 struct unit{            //The basic unit of List
-        unit* prev = nullptr;
+        unit* prev = (unit*)0;
         DATA data;
-        unit* next = nullptr;
+        unit* next = (unit*)0;
 };
 
-template<class DATA> class List{               //Double-direction Linked List
+
+
+template<class DATA> class List{
     public:
     
     //length of list
@@ -29,13 +31,17 @@ template<class DATA> class List{               //Double-direction Linked List
     int insertAtBack(DATA, int);
     int insertAtFront(DATA, int);
     void append(DATA);
+    void append(List);
     void deleteThisNode(int);
     DATA pop();
     void push(DATA);
+    DATA popFront();
 };
 
+//This class can be ignored
 template<class DATA> class Stack : public List<DATA>{};
 
+//The construction function generates a 0-length list
 template<class DATA> List<DATA>::List(){
     head = new unit<DATA>;
     tail = new unit<DATA>;
@@ -44,6 +50,7 @@ template<class DATA> List<DATA>::List(){
     tail->prev = head;
 }
 
+//The destructor function deletes every node
 template<class DATA> List<DATA>::~List(){
     for(int i = 0; i < len; i++){
         deleteThisNode(i);
@@ -52,8 +59,12 @@ template<class DATA> List<DATA>::~List(){
     delete tail;
 }
 
+//operates like a pointer
 template <class DATA> DATA &List<DATA>::operator[](int SN) {
     DATA temp;
+    if(SN<0){
+        return temp;//TODO: Raise an exception
+    }
     for(int i = 0; i <= SN; i++){
         cursor = cursor->next;
     }
@@ -64,6 +75,20 @@ template <class DATA> DATA &List<DATA>::operator[](int SN) {
     return out;
 }
 
+//There should be a linear search
+//-1 means search failed. OTW, the SN of the data.
+template <class DATA> int List<DATA>::search(DATA dataToSearch){
+    cursor = head;
+    for(int i = 0; i < len; i++){
+        cursor = cursor->next;
+        if(cursor->data == dataToSearch){
+            return i;
+        }
+    }
+    return -1;
+}
+
+//This is awful. Do not use it.
 template <class DATA> int List<DATA>::insert(DATA dataToInsert, int placeToInsert){
     if(placeToInsert < 0 || placeToInsert > len)  
     //Because this is the method to insert the first valid node, placeToInsert is the place where the 
@@ -88,6 +113,7 @@ template <class DATA> int List<DATA>::insert(DATA dataToInsert, int placeToInser
     return 0;
 }
 
+//Use these instead.
 template <class DATA> int List<DATA>::insertAtBack(DATA dataToInsert, int placeToInsert){
     if(placeToInsert < 0 || placeToInsert > len)  
     //yep, this time the cursor should be at list[placeToInsert]
@@ -134,6 +160,27 @@ template <class DATA> int List<DATA>::insertAtFront(DATA dataToInsert, int place
     return 0;
 }
 
+//Trying to imitate the append() in python
+template <class DATA> void List<DATA>::append(DATA dataToAppend) {
+  cursor = tail;
+  unit<DATA> *temp = new unit<DATA>;
+  temp->data = dataToAppend;
+  temp->prev = cursor->prev;
+  temp->next = cursor;
+  cursor->prev = temp;
+  temp->prev->next = temp;
+  cursor = head;
+  len++;
+}
+
+/*
+template <class DATA> void List<DATA>::append(List<DATA> listToAppend){
+    for(int i = 0; i < listToAppend.len; i++){
+        append(listToAppend[i]);
+    }
+}
+*/
+//For obvious reasons, merely using "delete" as name is not a wise option.
 template <class DATA> void List<DATA>::deleteThisNode(int placeToDelete){
     unit<DATA>* temp;
     // search for the designated node
@@ -152,12 +199,11 @@ template <class DATA> void List<DATA>::deleteThisNode(int placeToDelete){
     cursor = head;
 }
 
+//pop() and push() are used while creating stacks.
 template <class DATA> DATA List<DATA>::pop() {
   DATA temp = (DATA)0;
-  if(len <= 0) return temp;
+  if(len <= 0) return temp;//TODO: Raise an exception
   temp = tail->prev->data;
-  cursor = tail;
-  tail->prev = tail->prev->prev;
   deleteThisNode(len - 1);
   cursor = head;
   return temp;
@@ -166,3 +212,14 @@ template <class DATA> DATA List<DATA>::pop() {
 template <class DATA> void List<DATA>::push(DATA dataToPush) {
   insertAtBack(dataToPush, len);
 }
+
+//popFront is used while creating queues.
+template <class DATA> DATA List<DATA>::popFront(){
+    DATA temp = (DATA)0;
+    if(len <= 0) return temp;//TODO: Raise an exception
+    temp = head->next->data;
+    deleteThisNode(0);
+    cursor = head;
+    return temp;
+}
+
