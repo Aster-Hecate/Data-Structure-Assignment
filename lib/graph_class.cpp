@@ -1,4 +1,4 @@
-#include <iterator>
+
 #define THIS_IS_GRAPH_CLASS
 
 #ifndef THIS_IS_REQUISITORIES
@@ -60,7 +60,6 @@ template <class DATA> void Graph<DATA>::addVericleFromEdge(edge<DATA> IHateNamin
 }
 
 template <class DATA> void Graph<DATA>::init(std::ifstream &inputFromFile){
-  std::cout << "\nINIT START\n";//TODO:
   
   int flagNonDirectional = 0;
 

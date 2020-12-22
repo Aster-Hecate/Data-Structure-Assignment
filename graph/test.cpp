@@ -5,7 +5,8 @@
 #define HEADERS_READY
 
 #include "../lib/requisitories.h"
-#include "../lib/graph_class.h"
+#include "../lib/graph_class.cpp"
+#include "dijkstra.cpp"
 
 using namespace std;
 
@@ -15,8 +16,7 @@ int main() {
   IF.open("test");
   Graph<int> g;
   g.init(IF);
-  g.printMatrix();
-  cout << "YES";
+  unitSet *us = optimize(g, "A");
   IF.close();
 
   

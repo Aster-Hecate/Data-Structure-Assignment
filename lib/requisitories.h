@@ -31,7 +31,7 @@ template<class DATA> class List{
     int insertAtBack(DATA, int);
     int insertAtFront(DATA, int);
     void append(DATA);
-    void append(List);
+    //void append(List);
     void deleteThisNode(int);
     DATA pop();
     void push(DATA);
@@ -61,18 +61,15 @@ template<class DATA> List<DATA>::~List(){
 
 //operates like a pointer
 template <class DATA> DATA &List<DATA>::operator[](int SN) {
-    DATA temp;
-    if(SN<0){
-        return temp;//TODO: Raise an exception
-    }
+    cursor = head;
     for(int i = 0; i <= SN; i++){
         cursor = cursor->next;
     }
     //there is no usage of pointers so the memory is safe.
-    temp = cursor->data;
+    DATA& temp = cursor->data;
     cursor = head;
-    DATA& out = temp;
-    return out;
+    
+    return temp;
 }
 
 //There should be a linear search
@@ -81,15 +78,18 @@ template <class DATA> int List<DATA>::search(DATA dataToSearch){
     cursor = head;
     for(int i = 0; i < len; i++){
         cursor = cursor->next;
-        if(cursor->data == dataToSearch){
+        if (cursor->data == dataToSearch) {
+            cursor = head;
             return i;
         }
     }
+    cursor = head;
     return -1;
 }
 
 //This is awful. Do not use it.
 template <class DATA> int List<DATA>::insert(DATA dataToInsert, int placeToInsert){
+    cursor = head;
     if(placeToInsert < 0 || placeToInsert > len)  
     //Because this is the method to insert the first valid node, placeToInsert is the place where the 
     //newly inserted node should be, instead of the place where the cursor is.
@@ -162,12 +162,11 @@ template <class DATA> int List<DATA>::insertAtFront(DATA dataToInsert, int place
 
 //Trying to imitate the append() in python
 template <class DATA> void List<DATA>::append(DATA dataToAppend) {
-  cursor = tail;
   unit<DATA> *temp = new unit<DATA>;
   temp->data = dataToAppend;
-  temp->prev = cursor->prev;
-  temp->next = cursor;
-  cursor->prev = temp;
+  temp->prev = tail->prev;
+  temp->next = tail;
+  tail->prev = temp;
   temp->prev->next = temp;
   cursor = head;
   len++;
