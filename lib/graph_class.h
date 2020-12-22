@@ -1,3 +1,4 @@
+#include <iterator>
 #define THIS_IS_GRAPH_CLASS
 
 #ifndef THIS_IS_REQUISITORIES
@@ -33,14 +34,22 @@ public:
   List<std::string> verticles;
   List<edge<DATA> > edges;//each edge is directional
   //Graph();
-  //~Graph();
+  ~Graph();
   void init(std::ifstream&);
   void addVericleFromEdge(edge<DATA>);
+  void printMatrix();
 };
 
 
-template <class DATA>
-void Graph<DATA>::addVericleFromEdge(edge<DATA> IHateNamingVariables) {
+template <class DATA> Graph<DATA>::~Graph<DATA>() {
+  for (int i = 0; i < verticles.len; i++) {
+    delete[] adjacencyMatrix[i];
+  }
+  delete[] adjacencyMatrix;
+}
+
+
+template <class DATA> void Graph<DATA>::addVericleFromEdge(edge<DATA> IHateNamingVariables) {
   if (verticles.search(IHateNamingVariables.origin) < 0) {
     verticles.append(IHateNamingVariables.origin);
   }
@@ -65,7 +74,6 @@ template <class DATA> void Graph<DATA>::init(std::ifstream &inputFromFile){
 
   std::istringstream iss;
 
-
   //from file to verticles, edges
   while (!inputFromFile.eof()) {
     getline(inputFromFile, str);
@@ -77,7 +85,7 @@ template <class DATA> void Graph<DATA>::init(std::ifstream &inputFromFile){
       //std::cout << "case right\n";
       tempOrigin = tempEdge[0];
       tempDest = tempEdge[2];
-      tempLength = std::stoi(tempEdge[3]);
+      tempLength = std::stod(tempEdge[3]);
       temp[0].origin = tempOrigin;
       temp[0].dest = tempDest;
       temp[0].distance = tempLength;
@@ -85,7 +93,7 @@ template <class DATA> void Graph<DATA>::init(std::ifstream &inputFromFile){
       //std::cout << "case left\n";
       tempOrigin = tempEdge[2];
       tempDest = tempEdge[0];
-      tempLength = std::stoi(tempEdge[3]);
+      tempLength = std::stod(tempEdge[3]);
       temp[0].origin = tempOrigin;
       temp[0].dest = tempDest;
       temp[0].distance = tempLength;
@@ -94,7 +102,7 @@ template <class DATA> void Graph<DATA>::init(std::ifstream &inputFromFile){
       flagNonDirectional = 1;
       tempOrigin = tempEdge[0];
       tempDest = tempEdge[2];
-      tempLength = std::stoi(tempEdge[3]);
+      tempLength = std::stod(tempEdge[3]);
       temp[0].origin = tempOrigin;
       temp[0].dest = tempDest;
       temp[0].distance = tempLength;
@@ -106,7 +114,7 @@ template <class DATA> void Graph<DATA>::init(std::ifstream &inputFromFile){
       flagNonDirectional = 1;
       tempOrigin = tempEdge[0];
       tempDest = tempEdge[1];
-      tempLength = std::stoi(tempEdge[2]);
+      tempLength = std::stod(tempEdge[2]);
       temp[0].origin = tempOrigin;
       temp[0].dest = tempDest;
       temp[0].distance = tempLength;
@@ -128,9 +136,30 @@ template <class DATA> void Graph<DATA>::init(std::ifstream &inputFromFile){
     addVericleFromEdge(temp[0]);
     // std::cout << "verticles ready\n";
     
-    
   }
 
-  
-  
+  //create blank A
+  adjacencyMatrix = new DATA*[verticles.len];
+  for (int i = 0; i < verticles.len; i++) {
+    adjacencyMatrix[i] = new DATA[verticles.len];
+    for (int j = 0; j < verticles.len; j++) {
+      adjacencyMatrix[i][j] = INFINITY;
+    }
+  }
+  for (int i = 0; i < verticles.len; i++) {
+    adjacencyMatrix[i][i] = 0;
+  }
+  //create Adjacency Matrix
+  for (int i = 0; i < edges.len; i++) {
+    adjacencyMatrix[verticles.search(edges[i].origin)][verticles.search(edges[i].dest)] = edges[i].distance;
+  }
+}
+
+template <class DATA> void Graph<DATA>::printMatrix() {
+  for (int i = 0; i < verticles.len; i++) {
+    for (int j = 0; j < verticles.len; j++) {
+      std::cout << adjacencyMatrix[i][j] << " ";
+    }
+    std::cout << "\n";
+  }
 }

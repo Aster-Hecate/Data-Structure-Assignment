@@ -15,6 +15,7 @@ int main() {
   IF.open("test");
   Graph<int> g;
   g.init(IF);
+  g.printMatrix();
   cout << "YES";
   IF.close();
 
