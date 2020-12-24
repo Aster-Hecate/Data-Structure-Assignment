@@ -20,7 +20,8 @@
 struct unitSet {
   int node;
   int length;
-  List<int> path;
+  int* path;
+  int pathLength = 0;
 };
 
 template <class DATA> unitSet *optimize(Graph<DATA> G, std::string source) {
@@ -28,19 +29,21 @@ template <class DATA> unitSet *optimize(Graph<DATA> G, std::string source) {
   int iSource = G.verticles.search(source);
   unitSet *operate = new unitSet[vlen];
   unitSet *result = new unitSet[vlen];
+for(int i = 0; i <= vlen; i++){
+  operate[i].path = new int[vlen];
+  result[i].path = new int[vlen];
+}
+
   
   for (int i = 0; i < vlen; i++) {
     result[i].node = i;
     result[i].length = INFINITY;
-    result[i].path.append(iSource);
+    result[i].path[result[i].pathLength] = iSource;
+    result[i].pathLength++;
     operate[i].node = i;
     operate[i].length = INFINITY;
-    operate[i].path.append(iSource);
-    /*
-    if (operate[i].length < INFINITY) {
-      operate[i].path.append(i);
-    }
-*/
+    operate[i].path[operate[i].pathLength] = iSource;
+    operate[i].pathLength++;
   }
 
   operate[iSource].length = 0;
@@ -53,6 +56,7 @@ template <class DATA> unitSet *optimize(Graph<DATA> G, std::string source) {
 
   for (int round = 0; round < vlen; round++) {
     std::cout << "\nROUND " << round + 1 << "\n";
+    //find vector
     for (int i = 0; i < vlen; i++) {
       if ((operate[i].length >= 0) &&
           (operate[i].length < shortestPathLengthInOperate)) {
@@ -65,19 +69,30 @@ template <class DATA> unitSet *optimize(Graph<DATA> G, std::string source) {
       vectorInOperate[i] = G.adjacencyMatrix[shortestPathInOperate][i];
     }
 
+    //update result
     result[shortestPathInOperate].length =
         operate[shortestPathInOperate].length;
-    result[shortestPathInOperate].path =
-        operate[shortestPathInOperate].path;
+    /*
+    for(int j = 0; j < operate[shortestPathInOperate].pathLength; j++){
+      result[shortestPathInOperate].path[j] =
+      operate[shortestPathInOperate].path[j];
+    }
+    result[shortestPathInOperate].pathLength =
+    operate[shortestPathLengthInOperate].pathLength;
+*/
     operate[shortestPathInOperate].length = -1;
 
+    //update operate
     for (int i = 0; i < vlen; i++) {
       if ((shortestPathLengthInOperate + vectorInOperate[i]) <
           operate[i].length) {
         operate[i].length = (shortestPathLengthInOperate + vectorInOperate[i]);
-        operate[i].path = operate[shortestPathInOperate].path;
-        operate[i].path.append(i);
-        std::cout << "UPDATED " << G.verticles[i] << "\n";
+        for(int j = 0; j < operate[shortestPathInOperate].pathLength; j++){
+          operate[i].path[j] = operate[shortestPathInOperate].path[j];
+        }
+        operate[i].pathLength = operate[shortestPathInOperate].pathLength;
+        operate[i].path[operate[i].pathLength] = i;
+        operate[i].pathLength++;
       }
     }
 
@@ -90,26 +105,38 @@ template <class DATA> unitSet *optimize(Graph<DATA> G, std::string source) {
     }
     std::cout << "\n";
 
-     std::cout << "RESULT:\n";
-    for (int i = 0; i < vlen; i++) {
-      std::cout << G.verticles[result[i].node] << " " << result[i].length << " ";
-      for (int j = 0; j < result[i].path.len; j++) {
-        std::cout << G.verticles[result[i].path[j]];
-      }
-      std::cout << "\n";
-    }
+    
     std::cout << "OPERATE:\n";
     for (int i = 0; i < vlen; i++) {
       std::cout << G.verticles[operate[i].node] << " " << operate[i].length << " ";
-      for (int j = 0; j < operate[i].path.len; j++) {
+      for (int j = 0; j < operate[i].pathLength; j++) {
         std::cout << G.verticles[operate[i].path[j]];
         }
       std::cout << "\n";
     }
-    
   }
 
-  delete vectorInOperate;
+  for (int i = 0; i < vlen; i++) {
+    for (int j = 0; j < operate[i].pathLength; j++) {
+      result[i].path[j] = operate[i].path[j];
+    }
+    result[i].pathLength = operate[i].pathLength;
+  }
+
+   std::cout << "\nRESULT:\n";
+    for (int i = 0; i < vlen; i++) {
+      std::cout << G.verticles[result[i].node] << " " << result[i].length << " ";
+      for (int j = 0; j < result[i].pathLength; j++) {
+        std::cout << G.verticles[result[i].path[j]] ;
+      }
+      std::cout << "\n";
+    }
   
+  delete vectorInOperate;
+  for(int i = 0; i <= vlen; i++){
+    delete operate[i].path;
+    delete result[i].path;
+  }
+  delete[] operate;
   return result;
 }

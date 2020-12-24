@@ -24,7 +24,7 @@ template<class DATA> class List{
     List();
     ~List();
 
-    DATA &operator[](int);
+    DATA operator[](int);
     int search(DATA);
     
     int insert(DATA, int);
@@ -60,13 +60,13 @@ template<class DATA> List<DATA>::~List(){
 }
 
 //operates like a pointer
-template <class DATA> DATA &List<DATA>::operator[](int SN) {
+template <class DATA> DATA List<DATA>::operator[](int SN) {
     cursor = head;
     for(int i = 0; i <= SN; i++){
         cursor = cursor->next;
     }
     //there is no usage of pointers so the memory is safe.
-    DATA& temp = cursor->data;
+    DATA temp = cursor->data;
     cursor = head;
     
     return temp;
@@ -115,7 +115,8 @@ template <class DATA> int List<DATA>::insert(DATA dataToInsert, int placeToInser
 
 //Use these instead.
 template <class DATA> int List<DATA>::insertAtBack(DATA dataToInsert, int placeToInsert){
-    if(placeToInsert < 0 || placeToInsert > len)  
+    cursor = head;
+  if(placeToInsert < 0 || placeToInsert > len)  
     //yep, this time the cursor should be at list[placeToInsert]
         return -1;
     //creating a unit struct
@@ -138,7 +139,8 @@ template <class DATA> int List<DATA>::insertAtBack(DATA dataToInsert, int placeT
 }
 
 template <class DATA> int List<DATA>::insertAtFront(DATA dataToInsert, int placeToInsert){
-    if(placeToInsert < 0 || placeToInsert > len)  
+    cursor = head;
+  if(placeToInsert < 0 || placeToInsert > len)  
     //well, I tend not to use it
         return -1;
     //creating a unit struct
