@@ -14,7 +14,7 @@ int main() {
 	int select = 1;
 	while (select != 0) {
 		cout << "Menu" << endl;
-		cout << "0¡¢ÍË³ö³ÌĞò" << endl << "1¡¢¶ÁÈëÔ¤¶¨Í¼ÎÄ¼ş²¢ÏÔÊ¾×î¶ÌÂ·¾¶" << endl;
+		cout << "0ã€é€€å‡ºç¨‹åº" << endl << "1ã€è¯»å…¥é¢„å®šå›¾æ–‡ä»¶å¹¶æ˜¾ç¤ºæœ€çŸ­è·¯å¾„" << endl;
 		cin >> select;
 		switch (select) {
 		case 0:
@@ -29,9 +29,9 @@ int main() {
 			cin >> NAME;
 			ifstream IF;
 			IF.open("test");
-			Graph<int> g;//´´½¨Ò»¸ö¿ÕµÄÍ¼
-			g.init(IF);//°Ñ´ò¿ªµÄÎÄ¼ş¸³¸øg
-			unitSet* us = optimize(g, "NAME");//unitSetÊÇÒ»¸öÊı×é£¬ÀïÃæ´æ·Å×Å
+			Graph<int> g;//åˆ›å»ºä¸€ä¸ªç©ºçš„å›¾
+			g.init(IF);//æŠŠæ‰“å¼€çš„æ–‡ä»¶èµ‹ç»™g
+			unitSet* us = optimize(g, NAME);//unitSetæ˜¯ä¸€ä¸ªæ•°ç»„ï¼Œé‡Œé¢å­˜æ”¾ç€
 			IF.close();
 			delete us;
 			system("pause"); system("cls");
@@ -43,9 +43,9 @@ int main() {
 	}
 	/*ifstream IF;
 	IF.open("test");
-	Graph<int> g;//´´½¨Ò»¸ö¿ÕµÄÍ¼
-	g.init(IF);//°Ñ´ò¿ªµÄÎÄ¼ş¸³¸øg
-	unitSet* us = optimize(g, "A");//unitSetÊÇÒ»¸öÊı×é£¬ÀïÃæ´æ·Å×Å
+	Graph<int> g;//åˆ›å»ºä¸€ä¸ªç©ºçš„å›¾
+	g.init(IF);//æŠŠæ‰“å¼€çš„æ–‡ä»¶èµ‹ç»™g
+	unitSet* us = optimize(g, "A");//unitSetæ˜¯ä¸€ä¸ªæ•°ç»„ï¼Œé‡Œé¢å­˜æ”¾ç€
 	IF.close();
 	delete us;*/
 
@@ -55,7 +55,7 @@ int main() {
 	int select;
 	
 	cout << "Menu" << endl;
-	cout << "0¡¢ÍË³ö³ÌĞò" << endl << "1¡¢¶ÁÈëÔ¤¶¨Í¼ÎÄ¼ş" << endl << "2¡¢ÏÔÊ¾×î¶ÌÂ·¾¶" << endl;
+	cout << "0ã€é€€å‡ºç¨‹åº" << endl << "1ã€è¯»å…¥é¢„å®šå›¾æ–‡ä»¶" << endl << "2ã€æ˜¾ç¤ºæœ€çŸ­è·¯å¾„" << endl;
 	cin >> select;
 	switch (select) {
 	case 0:
