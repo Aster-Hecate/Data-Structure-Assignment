@@ -16,7 +16,7 @@ int main() {
   IF.open("example.graph");
   Graph<int> g;
   g.init(IF);
-  unitSet* uspt = optimize(g, "A");
+  unitSet *uspt = optimize(g, "A");
   IF.close();
   delete[] uspt;
   
