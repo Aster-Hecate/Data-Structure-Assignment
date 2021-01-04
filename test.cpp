@@ -13,7 +13,7 @@ using namespace std;
 int main() {
   
   ifstream IF;
-  IF.open("graph/test");
+  IF.open("example.graph");
   Graph<int> g;
   g.init(IF);
   unitSet* uspt = optimize(g, "A");
