@@ -24,7 +24,7 @@ struct unitSet {
   int pathLength = 0;
 };
 
-template <class DATA> unitSet *optimize(Graph<DATA> G, std::string source) {
+template <class DATA> void optimize(Graph<DATA> G, std::string source) {
   int vlen = G.verticles.len;
   int iSource = G.verticles.search(source);
   unitSet *operate = new unitSet[vlen];
@@ -123,20 +123,21 @@ for(int i = 0; i <= vlen; i++){
     result[i].pathLength = operate[i].pathLength;
   }
 
-   std::cout << "\nRESULT:\n";
+   std::cout << "\n从节点"<< source <<"到各个节点的距离如下：\n";
     for (int i = 0; i < vlen; i++) {
-      std::cout << G.verticles[result[i].node] << " " << result[i].length << " ";
+      std::cout << source << "->" << G.verticles[result[i].node] << " 距离为：" << result[i].length << " 路径为：";
       for (int j = 0; j < result[i].pathLength; j++) {
         std::cout << G.verticles[result[i].path[j]] ;
       }
       std::cout << "\n";
     }
-  
-  delete vectorInOperate;
+
+    delete vectorInOperate;
+    /*
   for(int i = 0; i <= vlen; i++){
     delete operate[i].path;
     delete result[i].path;
-  }
+  }*/
   delete[] operate;
-  return result;
+  delete[] result;
 }

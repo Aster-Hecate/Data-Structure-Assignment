@@ -38,6 +38,7 @@ public:
   void init(std::ifstream&);
   void addVericleFromEdge(edge<DATA>);
   void printMatrix();
+  void printVerticles();
 };
 
 
@@ -160,5 +161,11 @@ template <class DATA> void Graph<DATA>::printMatrix() {
       std::cout << adjacencyMatrix[i][j] << " ";
     }
     std::cout << "\n";
+  }
+}
+
+template <class DATA> void Graph<DATA>::printVerticles() {
+  for (int i = 0; i < verticles.len; i++) {
+    std::cout << verticles[i] << " ";
   }
 }
